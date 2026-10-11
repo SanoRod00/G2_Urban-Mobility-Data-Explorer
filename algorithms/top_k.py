@@ -20,7 +20,7 @@ def _down(h, i):
 def top_k(items, k, key=None):
     """Return the k highest-scoring items, best first. Ties: first seen wins."""
     if k < 0:
-        raise ValueError("k must b=nto be negative")
+        raise ValueError("k must not be negative")
     heap = []
     for seq, item in enumerate(items):
         score = item if key is None else key(item)
