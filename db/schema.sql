@@ -87,16 +87,16 @@ CREATE TABLE IF NOT EXISTS agg_zone_weekday_hour(
 );
 
 CREATE TABLE IF NOT EXISTS agg_flatfare_hourly(
-    manhatta_zone INTEGER NOT NULL,
+    manhattan_zone INTEGER NOT NULL,
     hour INTEGER NOT NULL,
     dist_band INTEGER NOT NULL,
     metered_trips INTEGER NOT NULL,
     metered_fare_sum REAL NOT NULL,
     metered_over_flat INTEGER NOT NULL,
 
-    primary key (manhattan_zone, hour, dist_band),
+    PRIMARY KEY (manhattan_zone, hour, dist_band),
     FOREIGN KEY (manhattan_zone) REFERENCES zones(zone_id),
 
-    CHHECK (hour BETWEEN 0 AND 23)
+    CHECK (hour BETWEEN 0 AND 23)
 );
 
