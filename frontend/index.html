@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Explore NYC taxi trips, fares, and pickup patterns in one clear dashboard.">
+	<title>NYC Taxi Data Explorer</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header class="site-header">
+		<div class="brand">
+			<span class="brand-mark" aria-hidden="true">NY</span>
+			<div>
+				<p class="eyebrow">Urban Mobility Lab</p>
+				<h1>NYC Taxi Data Explorer</h1>
+			</div>
+		</div>
+		<p class="header-note">A closer look at how New York moves.</p>
+	</header>
+
+	<main>
+		<section class="intro" aria-labelledby="welcome-heading">
+			<div>
+				<p class="eyebrow">The city, one trip at a time</p>
+				<h2 id="welcome-heading">Find the story behind the ride.</h2>
+				<p class="intro-copy">Browse taxi trips, compare fares, and see where the city gets busy. Start with the overview below, then follow the patterns that catch your eye.</p>
+			</div>
+			<div class="date-control">
+				<label for="date-range">Looking at</label>
+				<select id="date-range" name="date-range">
+					<option>All available trips</option>
+					<option>Last 30 days</option>
+					<option>Last 7 days</option>
+				</select>
+			</div>
+		</section>
+
+		<section class="dashboard" aria-labelledby="overview-heading">
+			<div class="section-heading">
+				<div>
+					<p class="eyebrow">At a glance</p>
+					<h2 id="overview-heading">Dashboard overview</h2>
+				</div>
+				<p class="updated">Data updates as new trips are loaded</p>
+			</div>
+
+			<div class="metric-grid">
+				<article class="metric-card">
+					<p class="metric-label">Total trips</p>
+					<p class="metric-value" id="total-trips">—</p>
+					<p class="metric-caption">rides in the current view</p>
+				</article>
+				<article class="metric-card">
+					<p class="metric-label">Average fare</p>
+					<p class="metric-value" id="average-fare">—</p>
+					<p class="metric-caption">before tips and extras</p>
+				</article>
+				<article class="metric-card">
+					<p class="metric-label">Typical trip</p>
+					<p class="metric-value" id="average-distance">—</p>
+					<p class="metric-caption">average distance travelled</p>
+				</article>
+				<article class="metric-card accent-card">
+					<p class="metric-label">Busiest hour</p>
+					<p class="metric-value" id="busiest-hour">—</p>
+					<p class="metric-caption">when pickups peak</p>
+				</article>
+			</div>
+
+			<div class="dashboard-grid">
+				<section class="panel activity-panel" aria-labelledby="activity-heading">
+					<div class="panel-heading">
+						<div>
+							<p class="eyebrow">Pickup patterns</p>
+							<h3 id="activity-heading">When the city is on the move</h3>
+						</div>
+						<button type="button" class="icon-button" aria-label="Open activity details" title="Open activity details">↗</button>
+					</div>
+					<div class="chart-placeholder" id="trip-activity" role="img" aria-label="Trip activity chart will appear here">
+						<span>Trip activity will appear here once data is loaded.</span>
+					</div>
+				</section>
+
+				<aside class="panel insight-panel" aria-labelledby="insights-heading">
+					<p class="eyebrow">A little context</p>
+					<h3 id="insights-heading">What stands out</h3>
+					<p id="insight-copy">Load a dataset to uncover the busiest neighborhoods, busiest hours, and the trips that travel furthest.</p>
+					<div class="insight-divider" aria-hidden="true"></div>
+					<p class="tip-label">Try exploring</p>
+					<ul class="explore-list">
+						<li>Compare weekday and weekend travel</li>
+						<li>Spot the most popular pickup zones</li>
+						<li>See how distance affects the fare</li>
+					</ul>
+				</aside>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<p>Built for curious city-dwellers and better questions.</p>
+	</footer>
+
+	<script src="script.js"></script>
+</body>
+</html>
