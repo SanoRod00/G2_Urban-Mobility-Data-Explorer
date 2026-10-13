@@ -6,7 +6,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 LOOKUP = ROOT / "data/raw/taxi_zone_lookup.csv"
-OUR = ROOT / "data/processed/trips_sample.parquet"
+OUR = ROOT / "data/processed/trips_synthetic.parquet"
 JFK = 132
 
 def main(n=200_000):
@@ -82,7 +82,7 @@ def main(n=200_000):
         "fare_amount": fare,
         "trip_duration": dur_min,
         "trip_distance": dist, 
-        "passenger_count": rng.choice([1, 2, 3, 4, 5, 6], n, p=[.70, .40, .05, .03, .05, .03]),
+        "passenger_count": rng.choice([1, 2, 3, 4, 5, 6], n, p=[.70, .14, .05, .03, .05, .03]),
         "tolls": tolls, 
         "extra":extra, 
         "mta_tax": mta, 
