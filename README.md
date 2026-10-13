@@ -1,5 +1,76 @@
 # G2_Urban-Mobility-Data-Explorer
 
+## Run the API and dashboard
+
+### Requirements and data
+
+- Python 3.11 or newer.
+- Install the Python packages from the repository root:
+
+  ```bash
+  python -m pip install -r requirements.txt
+  ```
+
+- Place these supplied files in `data/raw/`: `yellow_tripdata_2019-01.csv`, `taxi_zone_lookup.csv`, `taxi_zones.shp`, `taxi_zones.dbf`, `taxi_zones.shx`, and `taxi_zones.prj`. Keep the shapefile and its companion files together.
+
+### Prepare the trip data
+
+Run from the repository root, in this order:
+
+Ensure `data/processed/` exists before the normalization step. It is ignored by Git, so a fresh clone may not contain it. In Bash, create it with `mkdir -p data/processed`; in PowerShell, use `New-Item -ItemType Directory -Force data/processed`.
+
+1. Convert taxi-zone shapes to the GeoJSON used by the API:
+
+   ```bash
+   python pipeline/convert_zones.py
+   ```
+
+2. Normalize the trip CSV:
+
+   ```bash
+   python pipeline/load_data.py
+   ```
+
+3. Clean the normalized Parquet data:
+
+   ```bash
+   python -m cleaning.validate
+   ```
+
+These steps create `data/raw/taxi_zones.geojson` and `data/processed/trips_cleaned.parquet`. The API reads the cleaned Parquet file through DuckDB. `TRIPS_PARQUET_PATH` can point it at another compatible Parquet file.
+
+There is no database load script in `db/` yet. The API reads Parquet directly; the SQLite schema documented below is not its query source.
+
+### Start the services
+
+Start the API from the repository root in one terminal:
+
+```bash
+python -m api.app
+```
+
+Start the static dashboard server in a second terminal:
+
+```bash
+python -m http.server 8000 --directory frontend
+```
+
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000). The current frontend has its API base URL set directly in `frontend/script.js`; for a local API, that address must point to `http://127.0.0.1:5000`.
+
+### Codespaces
+
+Before enabling trip-backed API routes in Codespaces, set the API port visibility to **Private**. Then start the API with `TRIP_DATA_API_ENABLED=1` in its environment, for example in Bash:
+
+```bash
+TRIP_DATA_API_ENABLED=1 python -m api.app
+```
+
+The frontend's API base URL must point to the API's forwarded Codespaces URL when using the dashboard there.
+
+### Dashboard screenshots
+
+Screenshot files have not been added to the repository yet. Put them in `docs/images/` to include them here.
+
 ## Database Design (ERD)
  
 The database is SQLite. It uses one fact table (`trips`), four lookup tables, and two pre-aggregated tables that make dashboard queries fast. The schema is defined in `db/schema.sql`
