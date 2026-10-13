@@ -69,7 +69,19 @@ The frontend's API base URL must point to the API's forwarded Codespaces URL whe
 
 ### Dashboard screenshots
 
-Screenshot files have not been added to the repository yet. Put them in `docs/images/` to include them here.
+The screenshots below show the dashboard filters, map, best pickup spots, and JFK flat-fare comparison.
+
+**Filters and pickup map**
+
+![Dashboard filters and pickup map](<docs/images/Screenshot 2026-10-13 170612.png>)
+
+**Best Spot to Wait and airport flat fare**
+
+![Best Spot to Wait and airport flat-fare comparison](<docs/images/Screenshot 2026-10-13 170742.png>)
+
+**Pickup zone map**
+
+![Pickup zone choropleth map](<docs/images/Screenshot 2026-10-13 170827.png>)
 
 ## Database Design (ERD)
  
