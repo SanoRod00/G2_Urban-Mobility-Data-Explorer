@@ -201,6 +201,7 @@ async function loadMap(filters) {
     if (!document.querySelector("#map-view svg")) DashboardMap.draw(document.getElementById("map-view"), result.geometry, showZoneDetails);
     state.mapRows = result.zoneData.results;
     DashboardMap.update(state.mapRows, document.getElementById("map-metric").value, state.bestSpots, state.selectedZone);
+    if (state.selectedZone !== null) showZoneDetails(state.selectedZone);
     const offMap = result.zoneData.results.filter((row) => [264, 265].includes(Number(row.zone_id)));
     document.getElementById("map-note").textContent = "Zones 264 and 265 have no map polygon" + (offMap.length ? "; matching zones in this view: " + offMap.map((row) => row.zone_id).join(", ") : "; neither has data in this filtered view.");
     const hasRows = result.zoneData.results.length > 0;
