@@ -3,7 +3,7 @@ import sqlite3
 import sys
 from pathlib import Path
 import pandas as pd
-import pyarrow.parquet as pd 
+import pyarrow.parquet as pq 
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -105,6 +105,10 @@ def main():
     load_lookup(con, "vendors", ["vendor_id", "vendor_name", "description"], [(1, "CMT", "Creative Mobile Technologies"), (2, "VeriFone", "VeriFone")])
     
     con.commit()
+
+    src = Path(sys.argv[1]) if len(sys.argv) > 1 else CLEANED
+    load_trips(con, src)
+    
     for t in ("zones", "payment_type", "rate_codes", "vendors"):
         print(t, con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0])
     con.close()
