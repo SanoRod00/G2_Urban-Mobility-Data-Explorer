@@ -13,8 +13,8 @@ INDEXES = {
     "idx_trips_pickup_zone": ("trips", "pickup_zone"),
     "idx_trips_dropoff_zone": ("trips", "dropoff_zone"),
     "idx_trips_fare": ("trips", "fare_amount"), 
-    "idx_trips_distance": ("trips", "trips_distance"),
-    "idx_trips_zone_wd_hour": ("trips", "pickpu_zone, pickup_weekday, pickup_hour"), 
+    "idx_trip_distance": ("trips", "trips_distance"),
+    "idx_trips_zone_wd_hour": ("trips", "pickpup_zone, pickup_weekday, pickup_hour"), 
     "idx_trips_rate_pu_do": ("trips", "rate_codes_id, pickup_zone, dropoff_zone") 
 }
 
