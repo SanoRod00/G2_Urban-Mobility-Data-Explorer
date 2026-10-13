@@ -6,6 +6,8 @@ def _up(h, i):
         p = (i - 1) // 2
         h[i], h[p] = h[p], h[i]
         i = p
+
+
 def _down(h, i):
     while True:
         s = i
@@ -16,11 +18,12 @@ def _down(h, i):
             return
         h[i], h[s] = h[s], h[i]
         i = s
-    
+
+
 def top_k(items, k, key=None):
     """Return the k highest-scoring items, best first. Ties: first seen wins."""
     if k < 0:
-        raise ValueError("k must b=nto be negative")
+        raise ValueError("k must not be negative")
     heap = []
     for seq, item in enumerate(items):
         score = item if key is None else key(item)
@@ -39,5 +42,5 @@ def top_k(items, k, key=None):
         heap[0] = heap[-1]
         heap.pop()
         if heap:
-            _down(heap,0)
+            _down(heap, 0)
     return out[::-1]

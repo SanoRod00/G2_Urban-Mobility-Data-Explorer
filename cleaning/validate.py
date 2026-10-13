@@ -20,7 +20,9 @@ RULES =[
     ("R06", "EXCESSIVE_DURATION", "drop", "secs > 43200"),
     ("R07", "EXCESSIVE_DISTANCE", "drop", "distance > 100"),
     ("R08", "DUPLICATE", "drop", "dup > 1"),
+    ("R10", "EXTREME_FARE", "drop", "fare > 250"),
     ("R09", "UNKNOWN_ZONE", "flag", "pickup_zone IN (264, 265) OR dropoff_zone IN (264, 265)"),
+    
 ]
 def run(src=SRC, out=OUT, log=LOG, summary=SUMMARY):
     src, out, log, summary = Path(src), Path(out), Path(log), Path(summary)
