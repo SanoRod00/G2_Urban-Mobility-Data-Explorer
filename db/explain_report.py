@@ -11,9 +11,9 @@ RUNS = 5
 QUERIES = {
     "Trips in one day (pickup time)": ("SELECT COUNT(*) FROM trips WHERE pickup_datetime >= ? AND pickup_datetime < ?",
                                         ("2019-01-15 00:00:00", "2019-01-16 00:00:00")),
-    "Trips from one pickup zone": ("SELECT COUNT(*), AVG(fare_amount) FROM trips WHERE dropoff_zone = ?", (236,)),
+    "Trips from one pickup zone": ("SELECT COUNT(*), AVG(fare_amount) FROM trips WHERE pickup_zone = ?", (236,)),
     "Fare range filter": ("SELECT COUNT(*) FROM trips WHERE fare_amount BETWEEN ? AND ?", (50, 60)), 
-    "Distance range filter": ("SELECT COUNT(*) FROM trips WHERE trip_distance BETWEEN ? AND ?", (1, 4, 20)), 
+    "Distance range filter": ("SELECT COUNT(*) FROM trips WHERE trip_distance BETWEEN ? AND ?", (1, 4)), 
     "Best Spot: zone + weekday + hour": ("SELECT pickup_zone, SUM(total_amount - tolls), SUM(trip_duration), COUNT(*)" 
                                          "FROM trips WHERE pickup_weekday = ? AND pickup_hour = ? GROUP By pickup_zone", (2, 8)), 
     "Flat fare: JFK metered trips":("SELECT pickup_hour, COUNT(*), AVG(fare_amount) FROM trips " 
