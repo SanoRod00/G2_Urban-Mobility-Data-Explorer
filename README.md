@@ -149,12 +149,12 @@ SQLite has no dedicated datetime type, so timestamps are stored as ISO 8601 `TEX
 | `tip` | REAL | nullable | Tip amount. Always 0 for cash trips because cash trips are not recorded.
 | `improvement_surcharge` | REAL | nullable | Per_trip improvement surcharge. |
 | `congestion_surcharge` | REAL | nullable | Empty Jnuary 2019, because the charge began later. |
-`total_amount` REAL nullable Total charged to the rider, excluding cash tips.
-`avg_speed_mph`REAL  nullable  Average speed: distance divided by durartion in hours. Derived. Congestion indicator and outlier check.
-`revenue_per_minute` REAL nullable Driver earnings per minute: (`total_amount`, minus `tolls`) divided by `trip_duration`. Derived.
-`fare-per-mile` REAL nullable `fare_amount` divided by `trip_distance`. Derived. Null when distance is 0.
-`tip_percentage` REAL  nullable `tip` divided by `fare_amount`, for card trips only. Derived.
-`pickup_hour` INTEGER NOT NULL, 0 to 23 Hour of the pickup time. Derived.
+| `total_amount` | REAL | nullable | Total charged to the rider, excluding cash tips. |
+| `avg_speed_mph` | REAL | nullable | Average speed: distance divided by durartion in hours. Derived. Congestion indicator and outlier check. |
+| `revenue_per_minute` | REAL | nullable | Driver earnings per minute: (`total_amount`, minus `tolls`) divided by `trip_duration`. Derived. |
+| `fare-per-mile` | REAL | nullable | `fare_amount` divided by `trip_distance`. Derived. Null when distance is 0. |
+| `tip_percentage` | REAL | nullable | `tip` divided by `fare_amount`, for card trips only. Derived. |
+| `pickup_hour` | INTEGER | NOT NULL, 0 to 23 | Hour of the pickup time. Derived. |
 | `pickup_weekday` | INTEGER NOT NULL, 1 to 7 Day of week of the pickup. Derived.  
 | `time_of_day` |TEXT NOT NULL, one of `night`,  `morning_rush`, `midday`, `evening_rush`, `evening` | Time-of-day bucket for the pickup hour. Derived. |
 | `unknown_zone_flag` | INTEGER | NOT NULL, 0 or 1 | 1 if the pickup or dropoff zone is an unknown or outside-NYC zone (IDs 264 and 265), otherwise 0. |
