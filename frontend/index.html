@@ -1,107 +1,206 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Explore NYC taxi trips, fares, and pickup patterns in one clear dashboard.">
-	<title>NYC Taxi Data Explorer</title>
-	<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore NYC taxi trips, fares, and pickup patterns in one clear dashboard.">
+    <title>NYC Taxi Data Explorer</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<header class="site-header">
-		<div class="brand">
-			<span class="brand-mark" aria-hidden="true">NY</span>
-			<div>
-				<p class="eyebrow">Urban Mobility Lab</p>
-				<h1>NYC Taxi Data Explorer</h1>
-			</div>
-		</div>
-		<p class="header-note">A closer look at how New York moves.</p>
-	</header>
+    <header class="site-header">
+        <div class="brand">
+            <span class="brand-mark" aria-hidden="true">NY</span>
+            <div>
+                <p class="eyebrow">Urban Mobility Lab</p>
+                <h1>NYC Taxi Data Explorer</h1>
+            </div>
+        </div>
+        <p class="header-note">A closer look at how New York moves.</p>
+    </header>
 
-	<main>
-		<section class="intro" aria-labelledby="welcome-heading">
-			<div>
-				<p class="eyebrow">The city, one trip at a time</p>
-				<h2 id="welcome-heading">Find the story behind the ride.</h2>
-				<p class="intro-copy">Browse taxi trips, compare fares, and see where the city gets busy. Start with the overview below, then follow the patterns that catch your eye.</p>
-			</div>
-			<div class="date-control">
-				<label for="date-range">Looking at</label>
-				<select id="date-range" name="date-range">
-					<option>All available trips</option>
-					<option>Last 30 days</option>
-					<option>Last 7 days</option>
-				</select>
-			</div>
-		</section>
+    <main>
+        <section class="intro" aria-labelledby="welcome-heading">
+            <div>
+                <p class="eyebrow">The city, one trip at a time</p>
+                <h2 id="welcome-heading">Find the story behind the ride.</h2>
+                <p class="intro-copy">
+                    Browse taxi trips, compare fares, and see where the city gets busy.
+                    Start with the overview below, then follow the patterns that catch your eye.
+                </p>
+            </div>
 
-		<section class="dashboard" aria-labelledby="overview-heading">
-			<div class="section-heading">
-				<div>
-					<p class="eyebrow">At a glance</p>
-					<h2 id="overview-heading">Dashboard overview</h2>
-				</div>
-				<p class="updated">Data updates as new trips are loaded</p>
-			</div>
+            <div class="date-control">
+                <label for="date-range">Looking at</label>
+                <select id="date-range" name="date-range">
+                    <option>All available trips</option>
+                    <option>Last 30 days</option>
+                    <option>Last 7 days</option>
+                </select>
+            </div>
+        </section>
 
-			<div class="metric-grid">
-				<article class="metric-card">
-					<p class="metric-label">Total trips</p>
-					<p class="metric-value" id="total-trips">—</p>
-					<p class="metric-caption">rides in the current view</p>
-				</article>
-				<article class="metric-card">
-					<p class="metric-label">Average fare</p>
-					<p class="metric-value" id="average-fare">—</p>
-					<p class="metric-caption">before tips and extras</p>
-				</article>
-				<article class="metric-card">
-					<p class="metric-label">Typical trip</p>
-					<p class="metric-value" id="average-distance">—</p>
-					<p class="metric-caption">average distance travelled</p>
-				</article>
-				<article class="metric-card accent-card">
-					<p class="metric-label">Busiest hour</p>
-					<p class="metric-value" id="busiest-hour">—</p>
-					<p class="metric-caption">when pickups peak</p>
-				</article>
-			</div>
+        <section class="dashboard" aria-labelledby="overview-heading">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">At a glance</p>
+                    <h2 id="overview-heading">Dashboard overview</h2>
+                </div>
+                <p class="updated">Data updates as new trips are loaded</p>
+            </div>
 
-			<div class="dashboard-grid">
-				<section class="panel activity-panel" aria-labelledby="activity-heading">
-					<div class="panel-heading">
-						<div>
-							<p class="eyebrow">Pickup patterns</p>
-							<h3 id="activity-heading">When the city is on the move</h3>
-						</div>
-						<button type="button" class="icon-button" aria-label="Open activity details" title="Open activity details">↗</button>
-					</div>
-					<div class="chart-placeholder" id="trip-activity" role="img" aria-label="Trip activity chart will appear here">
-						<span>Trip activity will appear here once data is loaded.</span>
-					</div>
-				</section>
+            <div class="metric-grid">
+                <article class="metric-card">
+                    <p class="metric-label">Total trips</p>
+                    <p class="metric-value" id="total-trips">—</p>
+                    <p class="metric-caption">rides in the current view</p>
+                </article>
 
-				<aside class="panel insight-panel" aria-labelledby="insights-heading">
-					<p class="eyebrow">A little context</p>
-					<h3 id="insights-heading">What stands out</h3>
-					<p id="insight-copy">Load a dataset to uncover the busiest neighborhoods, busiest hours, and the trips that travel furthest.</p>
-					<div class="insight-divider" aria-hidden="true"></div>
-					<p class="tip-label">Try exploring</p>
-					<ul class="explore-list">
-						<li>Compare weekday and weekend travel</li>
-						<li>Spot the most popular pickup zones</li>
-						<li>See how distance affects the fare</li>
-					</ul>
-				</aside>
-			</div>
-		</section>
-	</main>
+                <article class="metric-card">
+                    <p class="metric-label">Average fare</p>
+                    <p class="metric-value" id="average-fare">—</p>
+                    <p class="metric-caption">before tips and extras</p>
+                </article>
 
-	<footer class="site-footer">
-		<p>Built for curious city-dwellers and better questions.</p>
-	</footer>
+                <article class="metric-card">
+                    <p class="metric-label">Typical trip</p>
+                    <p class="metric-value" id="average-distance">—</p>
+                    <p class="metric-caption">average distance travelled</p>
+                </article>
 
-	<script src="script.js"></script>
+                <article class="metric-card accent-card">
+                    <p class="metric-label">Busiest hour</p>
+                    <p class="metric-value" id="busiest-hour">—</p>
+                    <p class="metric-caption">when pickups peak</p>
+                </article>
+            </div>
+
+            <div class="dashboard-grid">
+                <section class="panel activity-panel" aria-labelledby="activity-heading">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">Pickup patterns</p>
+                            <h3 id="activity-heading">When the city is on the move</h3>
+                        </div>
+                        <button type="button" class="icon-button"
+                            aria-label="Open activity details"
+                            title="Open activity details">↗</button>
+                    </div>
+
+                    <div class="chart-placeholder" id="trip-activity"
+                        role="img" aria-label="Trip activity chart will appear here">
+                        <span>Trip activity will appear here once data is loaded.</span>
+                    </div>
+                </section>
+
+                <aside class="panel insight-panel" aria-labelledby="insights-heading">
+                    <p class="eyebrow">A little context</p>
+                    <h3 id="insights-heading">What stands out</h3>
+                    <p id="insight-copy">Loading taxi-zone information...</p>
+
+                    <div class="insight-divider" aria-hidden="true"></div>
+
+                    <p class="tip-label">Try exploring</p>
+                    <ul class="explore-list">
+                        <li>Compare weekday and weekend travel</li>
+                        <li>Spot the most popular pickup zones</li>
+                        <li>See how distance affects the fare</li>
+                    </ul>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Best Pickup Spots -->
+        <section class="panel spots-panel" aria-labelledby="spots-heading">
+            <div class="panel-heading">
+                <div>
+                    <p class="eyebrow">Sample results</p>
+                    <h3 id="spots-heading">Best Pickup Spots</h3>
+                </div>
+            </div>
+
+            <p class="sample-notice">
+                Demonstration data only. These results are hardcoded examples,
+                not live calculations from actual taxi trips.
+            </p>
+
+            <div class="spots-controls">
+                <div>
+                    <label for="weekday-select">Day of the week</label>
+                    <select id="weekday-select">
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="7">Sunday</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="hour-select">Hour of the day</label>
+                    <select id="hour-select">
+                        <option value="0">00:00</option>
+                        <option value="1">01:00</option>
+                        <option value="2">02:00</option>
+                        <option value="3">03:00</option>
+                        <option value="4">04:00</option>
+                        <option value="5">05:00</option>
+                        <option value="6">06:00</option>
+                        <option value="7">07:00</option>
+                        <option value="8">08:00</option>
+                        <option value="9">09:00</option>
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12" selected>12:00</option>
+                        <option value="13">13:00</option>
+                        <option value="14">14:00</option>
+                        <option value="15">15:00</option>
+                        <option value="16">16:00</option>
+                        <option value="17">17:00</option>
+                        <option value="18">18:00</option>
+                        <option value="19">19:00</option>
+                        <option value="20">20:00</option>
+                        <option value="21">21:00</option>
+                        <option value="22">22:00</option>
+                        <option value="23">23:00</option>
+                    </select>
+                </div>
+
+                <button type="button" id="load-spots-button">Find pickup spots</button>
+            </div>
+
+            <p id="spots-status" role="status">
+                Choose a day and hour, then find the sample pickup spots.
+            </p>
+
+            <div class="spots-table-wrapper">
+                <table class="spots-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Pickup zone</th>
+                            <th>Borough</th>
+                            <th>Sample revenue/min</th>
+                            <th>Sample trips</th>
+                        </tr>
+                    </thead>
+                    <tbody id="spots-results">
+                        <tr>
+                            <td colspan="5">No results loaded yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Built for curious city-dwellers and better questions.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
