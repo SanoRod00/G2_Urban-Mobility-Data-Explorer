@@ -1,206 +1,258 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore NYC taxi trips, fares, and pickup patterns in one clear dashboard.">
-    <title>NYC Taxi Data Explorer</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore New York City taxi trips, fares, and pickup patterns.">
+  <title>NYC Taxi Data Explorer</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="brand">
-            <span class="brand-mark" aria-hidden="true">NY</span>
-            <div>
-                <p class="eyebrow">Urban Mobility Lab</p>
-                <h1>NYC Taxi Data Explorer</h1>
-            </div>
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">NY</span>
+      <div>
+        <p class="eyebrow">Urban Mobility Lab</p>
+        <h1>NYC Taxi Data Explorer</h1>
+      </div>
+    </div>
+    <p class="header-note">January 2019 yellow taxi trips</p>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="welcome-heading">
+      <div>
+        <p class="eyebrow">The city, one trip at a time</p>
+        <h2 id="welcome-heading">Find the story behind the ride.</h2>
+        <p class="intro-copy">Filter real trip records, compare borough patterns, and explore where demand rises through the day.</p>
+      </div>
+      <p class="updated" id="connection-mode">Connecting to trip data…</p>
+      <p class="widget-state" id="zones-state" aria-live="polite"></p>
+      <button type="button" class="retry-button" data-retry="zones" hidden>Retry zone loading</button>
+    </section>
+
+    <section class="dashboard" aria-labelledby="overview-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">At a glance</p>
+          <h2 id="overview-heading">Dashboard overview</h2>
         </div>
-        <p class="header-note">A closer look at how New York moves.</p>
-    </header>
+        <p class="updated">Use the filters to update every view.</p>
+      </div>
+      <div class="metric-grid">
+        <article class="metric-card">
+          <p class="metric-label">Total trips</p>
+          <p class="metric-value" id="total-trips">–</p>
+          <p class="metric-caption">rides in the current view</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Average fare</p>
+          <p class="metric-value" id="average-fare">–</p>
+          <p class="metric-caption">base fare in the current view</p>
+        </article>
+        <article class="metric-card">
+          <p class="metric-label">Typical trip</p>
+          <p class="metric-value" id="average-distance">–</p>
+          <p class="metric-caption">average distance in miles</p>
+        </article>
+        <article class="metric-card accent-card">
+          <p class="metric-label">Busiest hour</p>
+          <p class="metric-value" id="busiest-hour">–</p>
+          <p class="metric-caption" id="busiest-hour-count">pickups in the current view</p>
+        </article>
+      </div>
+      <p class="widget-state" id="summary-state" aria-live="polite"></p>
 
-    <main>
-        <section class="intro" aria-labelledby="welcome-heading">
+      <form class="filter-bar" id="filters-form" aria-label="Trip filters">
+        <label>Date from
+          <input id="date-from" name="date_from" type="date" min="2019-01-01" max="2019-01-31">
+        </label>
+        <label>Date to
+          <input id="date-to" name="date_to" type="date" min="2019-01-01" max="2019-01-31">
+        </label>
+        <label>Fare minimum
+          <input id="fare-min" name="fare_min" type="number" min="0" step="0.01" inputmode="decimal">
+        </label>
+        <label>Fare maximum
+          <input id="fare-max" name="fare_max" type="number" min="0" step="0.01" inputmode="decimal">
+        </label>
+        <label>Distance minimum
+          <input id="distance-min" name="distance_min" type="number" min="0" step="0.1" inputmode="decimal">
+        </label>
+        <label>Distance maximum
+          <input id="distance-max" name="distance_max" type="number" min="0" step="0.1" inputmode="decimal">
+        </label>
+        <label>Payment type
+          <select id="payment-type" name="payment_type">
+            <option value="">All payment types</option>
+            <option value="1">Type 1</option><option value="2">Type 2</option>
+            <option value="3">Type 3</option><option value="4">Type 4</option>
+            <option value="5">Type 5</option><option value="6">Type 6</option>
+          </select>
+        </label>
+        <label>Pickup zone
+          <select id="pickup-zone" name="pickup_zone"><option value="">All pickup zones</option></select>
+        </label>
+        <label>Dropoff zone
+          <select id="dropoff-zone" name="dropoff_zone"><option value="">All dropoff zones</option></select>
+        </label>
+        <div class="filter-actions">
+          <button type="submit" class="button button-primary">Apply filters</button>
+          <button type="button" id="reset-filters" class="button button-secondary">Reset</button>
+        </div>
+      </form>
+      <p id="app-status" class="live-status" aria-live="polite" role="status"></p>
+
+      <div class="dashboard-grid">
+        <section class="panel activity-panel" aria-labelledby="activity-heading" data-widget="hourly">
+          <div class="panel-heading">
             <div>
-                <p class="eyebrow">The city, one trip at a time</p>
-                <h2 id="welcome-heading">Find the story behind the ride.</h2>
-                <p class="intro-copy">
-                    Browse taxi trips, compare fares, and see where the city gets busy.
-                    Start with the overview below, then follow the patterns that catch your eye.
-                </p>
+              <p class="eyebrow">Pickup patterns</p>
+              <h3 id="activity-heading">Hourly demand</h3>
             </div>
-
-            <div class="date-control">
-                <label for="date-range">Looking at</label>
-                <select id="date-range" name="date-range">
-                    <option>All available trips</option>
-                    <option>Last 30 days</option>
-                    <option>Last 7 days</option>
-                </select>
-            </div>
+            <label class="compact-label">Weekday
+              <select id="hourly-weekday" aria-label="Filter hourly chart by weekday">
+                <option value="">All weekdays</option>
+              </select>
+            </label>
+          </div>
+          <p class="why-chart">Why this chart: it shows how pickup volume changes over the day.</p>
+          <p class="widget-state" id="hourly-state" aria-live="polite"></p>
+          <div class="chart-placeholder" id="trip-activity" role="img" aria-label="Hourly taxi demand chart"></div>
+          <button type="button" class="retry-button" data-retry="hourly" hidden>Retry</button>
         </section>
+        <aside class="panel insight-panel" aria-labelledby="insights-heading">
+          <p class="eyebrow">A little context</p>
+          <h3 id="insights-heading">What stands out</h3>
+          <p id="insight-copy">Zone metadata will appear after it loads.</p>
+          <div class="insight-divider" aria-hidden="true"></div>
+          <p class="tip-label">Explore the dashboard</p>
+          <ul class="explore-list">
+            <li>Compare pickup activity by zone and borough</li>
+            <li>See how distance relates to average fare</li>
+            <li>Find high-revenue-per-minute pickup areas</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
 
-        <section class="dashboard" aria-labelledby="overview-heading">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">At a glance</p>
-                    <h2 id="overview-heading">Dashboard overview</h2>
-                </div>
-                <p class="updated">Data updates as new trips are loaded</p>
-            </div>
+    <section class="panel map-panel" aria-labelledby="map-heading" data-widget="map">
+      <div class="panel-heading">
+        <div><p class="eyebrow">By taxi zone</p><h2 id="map-heading">Pickup and dropoff map</h2></div>
+        <div class="map-controls">
+          <label>Metric
+            <select id="map-metric"><option value="trips">Trips</option><option value="average_fare">Average fare ($)</option><option value="average_distance">Average distance (mi)</option></select>
+          </label>
+          <label>Zone type
+            <select id="map-zone-type"><option value="pickup">Pickup</option><option value="dropoff">Dropoff</option></select>
+          </label>
+          <label>Weekday
+            <select id="map-weekday"><option value="">All weekdays</option></select>
+          </label>
+          <label>Hour
+            <select id="map-hour"></select>
+          </label>
+        </div>
+      </div>
+      <p class="widget-state" id="map-state" aria-live="polite"></p>
+      <div class="map-layout">
+        <div class="map-viewport" id="map-view"></div>
+        <aside class="map-aside">
+          <div class="map-legend" aria-label="Map value scale">
+            <span>Low <span id="map-min">–</span></span><span class="legend-gradient" aria-hidden="true"></span><span>High <span id="map-max">–</span></span>
+          </div>
+          <p id="map-note" class="small-note">No zones without map polygons in this view.</p>
+          <div id="zone-details" class="zone-details" aria-live="polite">Select a zone to see its facts.</div>
+          <button type="button" id="use-pickup-zone" class="button button-secondary" hidden>Filter to this pickup zone</button>
+        </aside>
+      </div>
+      <button type="button" class="retry-button" data-retry="map" hidden>Retry</button>
+    </section>
 
-            <div class="metric-grid">
-                <article class="metric-card">
-                    <p class="metric-label">Total trips</p>
-                    <p class="metric-value" id="total-trips">—</p>
-                    <p class="metric-caption">rides in the current view</p>
-                </article>
+    <section class="panel trips-panel" aria-labelledby="trips-heading" data-widget="trips">
+      <div class="panel-heading"><div><p class="eyebrow">Trip records</p><h2 id="trips-heading">Trips</h2></div><p class="small-note" id="trips-count"></p></div>
+      <p class="widget-state" id="trips-state" aria-live="polite"></p>
+      <div class="table-scroll">
+        <table class="trips-table">
+          <thead><tr>
+            <th><button type="button" data-sort="trip_id">Trip ID <span aria-hidden="true">↕</span></button></th>
+            <th><button type="button" data-sort="pickup_datetime">Pickup time <span aria-hidden="true">↓</span></button></th>
+            <th>Pickup zone</th><th>Dropoff zone</th>
+            <th><button type="button" data-sort="fare">Fare <span aria-hidden="true">↕</span></button></th>
+            <th><button type="button" data-sort="distance">Distance <span aria-hidden="true">↕</span></button></th>
+            <th><button type="button" data-sort="total">Total <span aria-hidden="true">↕</span></button></th>
+          </tr></thead>
+          <tbody id="trips-results"></tbody>
+        </table>
+      </div>
+      <div class="pagination"><button type="button" id="previous-page" class="button button-secondary">Previous</button><span id="page-label">Page 1</span><button type="button" id="next-page" class="button button-secondary">Next</button><label>Rows <select id="per-page"><option>25</option><option selected>50</option><option>100</option></select></label></div>
+      <button type="button" class="retry-button" data-retry="trips" hidden>Retry</button>
+    </section>
 
-                <article class="metric-card">
-                    <p class="metric-label">Average fare</p>
-                    <p class="metric-value" id="average-fare">—</p>
-                    <p class="metric-caption">before tips and extras</p>
-                </article>
+    <section class="dashboard-grid chart-grid">
+      <article class="panel spots-panel" aria-labelledby="spots-heading" data-widget="best-spots">
+        <div class="panel-heading"><div><p class="eyebrow">Pay per minute</p><h2 id="spots-heading">Best Spot to Wait</h2></div></div>
+        <p class="why-chart">Why this chart: it shows pay per minute, not waiting time.</p>
+        <div class="spots-controls">
+          <label>Weekday<select id="weekday-select"></select></label>
+          <label>Hour<select id="hour-select"></select></label>
+          <button type="button" id="load-spots-button" class="button button-primary">Find pickup spots</button>
+        </div>
+        <p id="spots-status" class="widget-state" role="status" aria-live="polite"></p>
+        <div id="best-spots-chart" class="ranked-chart"></div>
+        <div class="table-scroll">
+          <table class="spots-table"><thead><tr><th>Rank</th><th>Pickup zone</th><th>Borough</th><th>Revenue/min</th><th>Trips</th></tr></thead><tbody id="spots-results"></tbody></table>
+        </div>
+        <button type="button" class="retry-button" data-retry="best-spots" hidden>Retry</button>
+      </article>
+      <article class="panel fare-panel" aria-labelledby="fare-heading" data-widget="flat-fare">
+        <div class="panel-heading"><div><p class="eyebrow">JFK only</p><h2 id="fare-heading">Airport flat fare</h2></div><button type="button" id="fare-direction" class="button button-secondary" aria-pressed="false">From airport</button></div>
+        <p class="why-chart">Why this chart: it compares observed JFK flat-fare and metered groups. 2019 data; historical, not current advice.</p>
+        <p class="widget-state" id="flat-fare-state" aria-live="polite"></p>
+        <div id="flat-fare-chart" class="fare-comparison"></div>
+        <p id="flat-fare-copy" class="small-note"></p>
+        <button type="button" class="retry-button" data-retry="flat-fare" hidden>Retry</button>
+      </article>
+      <article class="panel equity-panel" aria-labelledby="equity-heading" data-widget="equity">
+        <div class="panel-heading"><div><p class="eyebrow">Borough comparison</p><h2 id="equity-heading">Taxi equity</h2></div></div>
+        <p class="why-chart">Why this chart: pickup and zone shares make borough activity easier to compare.</p>
+        <p class="widget-state" id="equity-state" aria-live="polite"></p>
+        <div id="equity-chart" class="equity-list"></div>
+        <p id="equity-limitation" class="small-note"></p>
+        <button type="button" class="retry-button" data-retry="equity" hidden>Retry</button>
+      </article>
+      <article class="panel scatter-panel" aria-labelledby="scatter-heading" data-widget="scatter">
+        <div class="panel-heading"><div><p class="eyebrow">Zone averages</p><h2 id="scatter-heading">Fare vs distance</h2></div></div>
+        <p class="why-chart">Why this chart: it shows how zone-level average fares relate to average distance.</p>
+        <p class="widget-state" id="scatter-state" aria-live="polite"></p>
+        <div id="fare-distance-chart" class="chart-placeholder"></div>
+        <button type="button" class="retry-button" data-retry="scatter" hidden>Retry</button>
+      </article>
+      <article class="panel quality-panel" aria-labelledby="quality-heading" data-widget="quality">
+        <div class="panel-heading"><div><p class="eyebrow">Input checks</p><h2 id="quality-heading">Data quality</h2></div></div>
+        <p class="widget-state" id="quality-state" aria-live="polite"></p>
+        <dl id="quality-details" class="quality-details"></dl>
+        <button type="button" class="retry-button" data-retry="quality" hidden>Retry</button>
+      </article>
+    </section>
+  </main>
 
-                <article class="metric-card">
-                    <p class="metric-label">Typical trip</p>
-                    <p class="metric-value" id="average-distance">—</p>
-                    <p class="metric-caption">average distance travelled</p>
-                </article>
+  <dialog id="trip-drawer" class="detail-drawer" aria-labelledby="trip-detail-heading">
+    <div class="panel-heading"><div><p class="eyebrow">Trip record</p><h2 id="trip-detail-heading">Trip details</h2></div><button type="button" id="close-trip-drawer" class="button button-secondary">Close</button></div>
+    <p id="trip-detail-state" class="widget-state" aria-live="polite"></p><dl id="trip-detail-fields" class="quality-details"></dl>
+    <button type="button" class="retry-button" data-retry="trip-detail" hidden>Retry</button>
+  </dialog>
 
-                <article class="metric-card accent-card">
-                    <p class="metric-label">Busiest hour</p>
-                    <p class="metric-value" id="busiest-hour">—</p>
-                    <p class="metric-caption">when pickups peak</p>
-                </article>
-            </div>
+  <section id="contract-check" class="check-panel" aria-live="polite" hidden>
+    <h2>API contract check</h2><ul id="check-results"></ul>
+  </section>
+  <footer class="site-footer"><p>NYC yellow taxi trip data · January 2019</p></footer>
 
-            <div class="dashboard-grid">
-                <section class="panel activity-panel" aria-labelledby="activity-heading">
-                    <div class="panel-heading">
-                        <div>
-                            <p class="eyebrow">Pickup patterns</p>
-                            <h3 id="activity-heading">When the city is on the move</h3>
-                        </div>
-                        <button type="button" class="icon-button"
-                            aria-label="Open activity details"
-                            title="Open activity details">↗</button>
-                    </div>
-
-                    <div class="chart-placeholder" id="trip-activity"
-                        role="img" aria-label="Trip activity chart will appear here">
-                        <span>Trip activity will appear here once data is loaded.</span>
-                    </div>
-                </section>
-
-                <aside class="panel insight-panel" aria-labelledby="insights-heading">
-                    <p class="eyebrow">A little context</p>
-                    <h3 id="insights-heading">What stands out</h3>
-                    <p id="insight-copy">Loading taxi-zone information...</p>
-
-                    <div class="insight-divider" aria-hidden="true"></div>
-
-                    <p class="tip-label">Try exploring</p>
-                    <ul class="explore-list">
-                        <li>Compare weekday and weekend travel</li>
-                        <li>Spot the most popular pickup zones</li>
-                        <li>See how distance affects the fare</li>
-                    </ul>
-                </aside>
-            </div>
-        </section>
-
-        <!-- Best Pickup Spots -->
-        <section class="panel spots-panel" aria-labelledby="spots-heading">
-            <div class="panel-heading">
-                <div>
-                    <p class="eyebrow">Sample results</p>
-                    <h3 id="spots-heading">Best Pickup Spots</h3>
-                </div>
-            </div>
-
-            <p class="sample-notice">
-                Demonstration data only. These results are hardcoded examples,
-                not live calculations from actual taxi trips.
-            </p>
-
-            <div class="spots-controls">
-                <div>
-                    <label for="weekday-select">Day of the week</label>
-                    <select id="weekday-select">
-                        <option value="1">Monday</option>
-                        <option value="2">Tuesday</option>
-                        <option value="3">Wednesday</option>
-                        <option value="4">Thursday</option>
-                        <option value="5">Friday</option>
-                        <option value="6">Saturday</option>
-                        <option value="7">Sunday</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="hour-select">Hour of the day</label>
-                    <select id="hour-select">
-                        <option value="0">00:00</option>
-                        <option value="1">01:00</option>
-                        <option value="2">02:00</option>
-                        <option value="3">03:00</option>
-                        <option value="4">04:00</option>
-                        <option value="5">05:00</option>
-                        <option value="6">06:00</option>
-                        <option value="7">07:00</option>
-                        <option value="8">08:00</option>
-                        <option value="9">09:00</option>
-                        <option value="10">10:00</option>
-                        <option value="11">11:00</option>
-                        <option value="12" selected>12:00</option>
-                        <option value="13">13:00</option>
-                        <option value="14">14:00</option>
-                        <option value="15">15:00</option>
-                        <option value="16">16:00</option>
-                        <option value="17">17:00</option>
-                        <option value="18">18:00</option>
-                        <option value="19">19:00</option>
-                        <option value="20">20:00</option>
-                        <option value="21">21:00</option>
-                        <option value="22">22:00</option>
-                        <option value="23">23:00</option>
-                    </select>
-                </div>
-
-                <button type="button" id="load-spots-button">Find pickup spots</button>
-            </div>
-
-            <p id="spots-status" role="status">
-                Choose a day and hour, then find the sample pickup spots.
-            </p>
-
-            <div class="spots-table-wrapper">
-                <table class="spots-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Pickup zone</th>
-                            <th>Borough</th>
-                            <th>Sample revenue/min</th>
-                            <th>Sample trips</th>
-                        </tr>
-                    </thead>
-                    <tbody id="spots-results">
-                        <tr>
-                            <td colspan="5">No results loaded yet.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <p>Built for curious city-dwellers and better questions.</p>
-    </footer>
-
-    <script src="script.js"></script>
+  <script src="config.js"></script>
+  <script src="mock.js"></script>
+  <script src="api.js"></script>
+  <script src="map.js"></script>
+  <script src="charts.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
