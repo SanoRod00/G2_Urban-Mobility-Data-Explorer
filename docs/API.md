@@ -1,9 +1,9 @@
 # API contract
 
 The Flask API is implemented in `api/app.py`. Trip analytics use DuckDB to query
-`data/processed/trips_cleaned.parquet` directly. Set `TRIPS_PARQUET_PATH` to use a
-different cleaned Parquet file. The data-quality endpoint reads the normalized
-Parquet artifact because its purpose is to describe input quality.
+`data/processed/trips_cleaned.parquet` directly. Set `TRIPS_PARQUET` to use a
+different cleaned-schema Parquet file. The data-quality endpoint reads the
+normalized Parquet artifact because its purpose is to describe input quality.
 
 ## Enable trip-backed routes safely
 
@@ -14,9 +14,9 @@ to enable them. Outside Codespaces, the routes are enabled by default. Health
 and zone metadata routes remain available while trip routes are disabled.
 
 Create or refresh the cleaned dataset by running `python -m cleaning.validate`
-from the project root. Start the API with `python -m api.app`. Set
-In Codespaces, set `TRIP_DATA_API_ENABLED=1` in the API process environment only
-after the port's visibility has been confirmed.
+from the project root. Start the API with `python -m api.app`. In Codespaces,
+set `TRIP_DATA_API_ENABLED=1` in the API process environment only after the
+port's visibility has been confirmed.
 
 ## Existing routes
 

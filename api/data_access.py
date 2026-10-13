@@ -140,7 +140,7 @@ class TripData:
     """Runs bounded, parameterized analytical queries over Parquet."""
 
     def __init__(self, trips_path=None, normalized_path=None):
-        self.trips_path = Path(trips_path or os.getenv("TRIPS_PARQUET_PATH", DEFAULT_TRIPS_PATH))
+        self.trips_path = Path(trips_path or os.getenv("TRIPS_PARQUET", DEFAULT_TRIPS_PATH))
         self.normalized_path = Path(normalized_path or NORMALIZED_TRIPS_PATH)
 
     def _run(self, sql, params=(), *, normalized=False):
