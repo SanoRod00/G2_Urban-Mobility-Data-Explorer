@@ -103,8 +103,8 @@ SQLite has no dedicated datetime type, so timestamps are stored as ISO 8601 `TEX
 | `zone_name` | TEXT || zone name, e.g "JFK Airport". Blank for IDs 264 and 265 in the source file. |
 | `borough` | TEXT || Borough: Manhattan, Queens, Brooklyn, Bronx, Staten Island, EWR, or Unknwon.|
 | `service_zone` | TEXT || TLC service area grouping . |
-| `longitude` | REAL || Longitude of the zone centroid (WGS84), used for map makers. |
-| `latitude` | REAL ||Latitude of the zone centroid (WGS84). |
+| `longitude` | REAL || Longitude of the zone centroid, used for map makers. |
+| `latitude` | REAL ||Latitude of the zone centroid. |
 
 #### `payment_type` 
 
@@ -118,7 +118,7 @@ SQLite has no dedicated datetime type, so timestamps are stored as ISO 8601 `TEX
 | Column | Type | Constraints | Description |
 | --- | --- | --- | --- |
 | `rate_codes_id`| INTEGER | PK | TLC rate code: 1 = standard, 2 = JFK flat fare, 3 = Newark, 4 = Nassau/Westchester, 5 = negotiated, 6 = group ride. |
-| `description` | TEXT | NOT NULL | Readable name of the rate code. |
+| `description` | TEXT | NOT NULL | Readable name of the rate code |
 
 #### `vendors`
 
@@ -146,7 +146,7 @@ SQLite has no dedicated datetime type, so timestamps are stored as ISO 8601 `TEX
 | `tolls` | REAL | nullable | Tolls paid on the trip. |
 | `extra` | REAL | nullable | Extras and surcharges. |
 | `mta_tax` | REAL | nullable | Metropolitan Transportation Authority tax. |
-| `tip` | REAL | nullable | Tip amount. Always 0 for cash trips because cash trips are not recorded. |
+| `tip` | REAL | nullable | Tip amount. Always 0 for cash trip because cash trips are not recorded. |
 | `improvement_surcharge` | REAL | nullable | Per_trip improvement surcharge. |
 | `congestion_surcharge` | REAL | nullable | Empty January 2019, because the charge began later. |
 | `total_amount` | REAL | nullable | Total charged to the rider, excluding cash tips. |
@@ -187,4 +187,4 @@ SQLite has no dedicated datetime type, so timestamps are stored as ISO 8601 `TEX
 - **2NF:** each non-key column depends on the whole key. The tables with composite keys are the two `agg_*` tables.
 - **3NF:** trips store only IDs for zones, vendors, payment types, and rate codes. Zone names, boroughs, and descriptions live only in their own tables.
 - **Deliberate denormalization:** `pickup_hour`, `pickup_weekday`, `time_of_day`, and the other derived metrics are stored in `trips` even though they can be computed from the timestamps. Precomputing them speeds up filtering and grouping, and the aggregate tables avoid scanning millions of rows. The cost is extra storage and refresh step after each data load.
-- **Integrity:** primary keys, foreign keys, and CHECK constraints (positive fares, distance of 0 to 100 miles, dropoff after pickup, valid hour and weekday ranges) keep bad dat ou t of the databas. SQLite only enforces foreign keys if you run `PRAGMA foreign_keys = ON;` on every connection.
+- **Integrity:** primary keys, foreign keys, and CHECK constraints (positive fares, distance of 0 to 100 miles, dropoff after pickup, valid hour and weekday ranges) keep bad data ou t of the database.
