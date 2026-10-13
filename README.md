@@ -146,7 +146,7 @@ SQLite has no dedicated datetime type, so timestamps are stored as ISO 8601 `TEX
 | `tolls` | REAL | nullable | Tolls paid on the trip.
 | `extra` | REAL | nullable | Extras and surcharges (rush hour and overnight charges). |
 | `mta_tax` | REAL | nullable | Metropolitan Transportation Authority tax. |
-| `tip` | REAL | nullable | Tip amount. Always 0 for cash trips because cash trips are not recorded.
+| `tip` | REAL | nullable | Tip amount. Always 0 for cash trips because cash trips are not recorded. |
 | `improvement_surcharge` | REAL | nullable | Per_trip improvement surcharge. |
 | `congestion_surcharge` | REAL | nullable | Empty Jnuary 2019, because the charge began later. |
 | `total_amount` | REAL | nullable | Total charged to the rider, excluding cash tips. |
@@ -155,8 +155,8 @@ SQLite has no dedicated datetime type, so timestamps are stored as ISO 8601 `TEX
 | `fare-per-mile` | REAL | nullable | `fare_amount` divided by `trip_distance`. Derived. Null when distance is 0. |
 | `tip_percentage` | REAL | nullable | `tip` divided by `fare_amount`, for card trips only. Derived. |
 | `pickup_hour` | INTEGER | NOT NULL, 0 to 23 | Hour of the pickup time. Derived. |
-| `pickup_weekday` | INTEGER NOT NULL, 1 to 7 Day of week of the pickup. Derived.  
-| `time_of_day` |TEXT NOT NULL, one of `night`,  `morning_rush`, `midday`, `evening_rush`, `evening` | Time-of-day bucket for the pickup hour. Derived. |
+| `pickup_weekday` | INTEGER | NOT NULL, 1 to 7 | Day of week of the pickup. Derived. | 
+| `time_of_day` | TEXT | NOT NULL, one of `night`,  `morning_rush`, `midday`, `evening_rush`, `evening` | Time-of-day bucket for the pickup hour. Derived. |
 | `unknown_zone_flag` | INTEGER | NOT NULL, 0 or 1 | 1 if the pickup or dropoff zone is an unknown or outside-NYC zone (IDs 264 and 265), otherwise 0. |
 
 
